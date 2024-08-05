@@ -1,0 +1,40 @@
+/* Styles specific to the SearchResults component */
+.SearchResults {
+	text-align: center;
+	padding: 20px;
+}
+
+.SearchResults form {
+	margin-bottom: 20px;
+}
+
+.SearchResults label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+.SearchResults input[type="search"] {
+	width: 100%;
+	padding: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.SearchResults button {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	padding: 5px 15px;
+	cursor: pointer;
+}
+
+.SearchResults ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.SearchResults li {
+	margin-bottom: 10px;
+}
