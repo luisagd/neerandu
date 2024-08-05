@@ -209,7 +209,7 @@ function Diccionario() {
   return (
     <div>
       <main className=" min-h-screen text-center">
-        <Navbar />
+        {/* <Navbar /> */}
         <header className=" mt-10 flex flex-col items-center text-center  text-5xl md:text-6xl lg:text-8xl lg:font-semibold lg:font-mono lg:mt-72">
           <p className="">Ñe’ẽrandu</p>
         </header>
