@@ -12,5 +12,5 @@ const fetchData = (word) => {
 };
 export function onRequest(context) {
     let res = new Response(fetchData(context.params.word))
-    return res.json()
+    return JSON.stringify(res)
   }
