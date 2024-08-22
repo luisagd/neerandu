@@ -56,7 +56,19 @@ function SearchResults() {
   if (typeof window !== `undefined`) {
     var url = new URL(window.location.href);
   }
-  const fetchData = (word: string) => {
+  const fetchData = async (word: string) => {
+    const response = await fetch("/api/"+word);
+    const result = await response.json();
+    result.map((item) => {
+      if (item._score == 0) {
+        setWord(item);
+        console.log("CHANGED WORD");
+      }
+    });
+    setPosts(result);
+  };
+
+  const fetchData2 = (word: string) => {
     word = word.toLowerCase().replaceAll("'", "’").replaceAll("´", "’");
     const result = fuzzysort.go(word, dictionary, { key: "word", limit: 5 });
     result.map((item) => {
