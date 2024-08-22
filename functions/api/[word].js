@@ -7,5 +7,6 @@ const fetchData = (word) => {
   return result;
 };
 export function onRequest(context) {
-    return new Response(fetchData(context.params.word))
+    let res = new Response(fetchData(context.params.word))
+    return res.json()
   }
