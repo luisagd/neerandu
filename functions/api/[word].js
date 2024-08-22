@@ -7,9 +7,5 @@ const fetchData = (word) => {
   return result;
 };
 export function onRequest(context) {
-  let data;
-  try {data = fetchData(context.params.word);}catch(err){
-    console.log(err);
-  }
-    return new Response.json(data)
+    return new Response(fetchData(context.params.word))
   }
