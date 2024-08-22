@@ -1,5 +1,5 @@
 import fuzzysort from "fuzzysort";
-const dictionary = require("../json/diccionario.json");
+const dictionary = require("./json/diccionario.json");
 
 const fetchData = (word) => {
   word = word.toLowerCase().replaceAll("'", "’").replaceAll("´", "’");
@@ -7,5 +7,5 @@ const fetchData = (word) => {
   return result;
 };
 export function onRequest(context) {
-    return new Response(fetchData(context.params.word))
+    return new Response.json(fetchData(context.params.word))
   }
