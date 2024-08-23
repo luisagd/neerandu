@@ -25,7 +25,9 @@ const diacritics = [
   "ý",
 ];
 
-const dictionary = require("../json/diccionario.json");
+// const dictionary = require("../json/diccionario.json");
+const wordlist = require("../json/wordlist.json");
+
 var autoCompleteJS;
 
 export function Head() {
@@ -57,7 +59,7 @@ function SearchResults() {
     var url = new URL(window.location.href);
   }
   const fetchData = async (word: string) => {
-    const response = await fetch("/api/"+word);
+    const response = await fetch("/api?q="+word);
     const result = await response.json();
     result.map((item) => {
       if (item._score == 0) {
@@ -68,25 +70,25 @@ function SearchResults() {
     setPosts(result);
   };
 
-  const fetchData2 = (word: string) => {
-    word = word.toLowerCase().replaceAll("'", "’").replaceAll("´", "’");
-    const result = fuzzysort.go(word, dictionary, { key: "word", limit: 5 });
-    result.map((item) => {
-      if (item._score == 0) {
-        setWord(item);
-        console.log("CHANGED WORD");
-      }
-    });
-    setPosts(result);
-  };
+  // const fetchData2 = (word: string) => {
+  //   word = word.toLowerCase().replaceAll("'", "’").replaceAll("´", "’");
+  //   const result = fuzzysort.go(word, dictionary, { key: "word", limit: 5 });
+  //   result.map((item) => {
+  //     if (item._score == 0) {
+  //       setWord(item);
+  //       console.log("CHANGED WORD");
+  //     }
+  //   });
+  //   setPosts(result);
+  // };
 
   useEffect(() => {
     // 👇️ only runs once
     autoCompleteJS = new autoComplete({
       placeHolder: "Buscar palabra...",
       data: {
-        src: dictionary,
-        keys: ["word"],
+        src: wordlist,
+        // keys: ["word"],
       },
       resultItem: {
         highlight: true,
@@ -107,7 +109,7 @@ function SearchResults() {
       const feedback = event.detail;
       autoCompleteJS.input.blur();
       // Prepare User's Selected Value
-      const selection = feedback.selection.value[feedback.selection.key];
+      const selection = feedback.selection.value;
       // Render selected choice to selection div
       document.getElementById("query").innerHTML = selection;
       // Replace Input value with the selected value

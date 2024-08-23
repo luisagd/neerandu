@@ -101,3 +101,10 @@ with open(output_file, "w", encoding="utf8") as output:
     json.dump(data, fp=output, ensure_ascii=False)
 
 print("Second part complete.")
+
+wordlist = []
+for word in data:
+    wordlist.append(word["word"])
+
+with open("wordlist.json", "w", encoding="utf8") as output:
+    json.dump(wordlist, fp=output, ensure_ascii=False)
