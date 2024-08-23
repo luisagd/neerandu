@@ -5,7 +5,6 @@ import "../styles/autoComplete.css";
 import { useLocation } from "@gatsbyjs/reach-router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import fuzzysort from "fuzzysort";
 import autoComplete from "@tarekraafat/autocomplete.js";
 import icon from "../images/luisagdlogo.svg";
 
@@ -25,7 +24,6 @@ const diacritics = [
   "ý",
 ];
 
-// const dictionary = require("../json/diccionario.json");
 const wordlist = require("../json/wordlist.json");
 
 var autoCompleteJS;
@@ -50,6 +48,20 @@ export function Head() {
     </>
   );
 }
+function BoldedText({ text, shouldBeBold }) {
+  const textArray = text.split(RegExp(shouldBeBold, "ig"));
+  return (
+    <span>
+      {textArray.map((item, index) => (
+        <React.Fragment key={index}>
+          {item}
+          {index !== textArray.length - 1 && <b>{shouldBeBold}</b>}
+        </React.Fragment>
+      ))}
+    </span>
+  );
+}
+
 function SearchResults() {
   const location = useLocation();
   const [posts, setPosts] = useState([]);
@@ -59,7 +71,8 @@ function SearchResults() {
     var url = new URL(window.location.href);
   }
   const fetchData = async (word: string) => {
-    const response = await fetch("/api?q="+word);
+    let url = process.env.GATSBY_API_URL;
+    const response = await fetch(url+word);///api?q=
     const result = await response.json();
     result.map((item) => {
       if (item._score == 0) {
@@ -70,25 +83,12 @@ function SearchResults() {
     setPosts(result);
   };
 
-  // const fetchData2 = (word: string) => {
-  //   word = word.toLowerCase().replaceAll("'", "’").replaceAll("´", "’");
-  //   const result = fuzzysort.go(word, dictionary, { key: "word", limit: 5 });
-  //   result.map((item) => {
-  //     if (item._score == 0) {
-  //       setWord(item);
-  //       console.log("CHANGED WORD");
-  //     }
-  //   });
-  //   setPosts(result);
-  // };
-
   useEffect(() => {
     // 👇️ only runs once
     autoCompleteJS = new autoComplete({
       placeHolder: "Buscar palabra...",
       data: {
         src: wordlist,
-        // keys: ["word"],
       },
       resultItem: {
         highlight: true,
@@ -117,7 +117,7 @@ function SearchResults() {
       const query = document.getElementById("query").value;
       console.log("query: " + query);
       fetchData(query); // Console log autoComplete data feedback
-      console.log("fed" + feedback);
+      console.log("feed" + feedback);
     });
     const queryParams = new URLSearchParams(location.search);
     const word = queryParams.get("q");
@@ -131,7 +131,7 @@ function SearchResults() {
       <div className="my-5 px-16">
         {diacritics.map((char: string) => (
           <button
-            className="border w-fit px-2 border-blue-500 text-blue-600 m-1 text-lg lg:text-2xl"
+            className="border w-7 lg:w-10 py-1 border-blue-500 text-white bg-blue-600 m-1 text-lg lg:text-2xl rounded"
             onClick={() => {
               document.getElementById("query").value =
                 document.getElementById("query").value + char;
@@ -168,16 +168,6 @@ function SearchResults() {
             autoCapitalize="off"
           />
         </form>
-        {/* <button
-          className="bg-blue-200 text-blue-600 font-bold px-1 py-2 cursor-pointer rounded-3xl border-blue-500 border h-12 w-24"
-          onClick={() => {
-            const query = document.getElementById("query").value;
-            console.log("query: " + query);
-            fetchData(query);
-          }}
-        >
-          Buscar
-        </button> */}
       </div>
       {posts[0] && posts[0]._score == 0 && word && (
         <div className="px-10 lg:px-80uy text-left">
@@ -191,6 +181,24 @@ function SearchResults() {
                   {meaning.type}
                 </p>
                 <p className="lg:text-xl">{meaning.translation}</p>
+              </li>
+            ))}
+          </ol>
+          <ol>
+          <h1 className="text-xl lg:text-3xl">Ejemplos:</h1>
+            {word.obj.example.map((example) => (
+  
+              <li className="mb-2">
+                <div className="text-sm lg:text-base text-gray-700  font-montserrat">{example && example[0] && 
+                  <div>
+                    <p className="text-gray-700 ">
+                      <BoldedText text={example[0]} shouldBeBold={word.obj.word} />
+                    </p>
+                    <p className="text-blue-600">
+                      <BoldedText text={example[1]} shouldBeBold={word.obj.word} />
+                    </p>
+                </div> }
+                </div>
               </li>
             ))}
           </ol>

@@ -1,9 +1,11 @@
 import json
 import unicodedata
+from alive_progress import alive_bar
 
 # Define the input and output file paths
 input_file = "input.txt"
 output_file = "diccionario.json"
+corpora_file = 'corpora.json'
 
 # Initialize an empty list to store word definitions
 word_definitions = []
@@ -92,10 +94,37 @@ def gettype(meaning:[str]):
         result.append({"type":wordtype, "translation":wordtranslation})
     return result
 
+corpora= []
+with open(corpora_file, "r", encoding="utf8") as file:
+    corpora = json.load(file)
+
+def word_in_sentence(word, sentence):
+    # Split the string into words
+    words = sentence.lower().split()
+    # Check if the word is in the list of words
+    return word.lower() in words    
+
+def getexample(word, lang):
+    examples = []
+    for pair in corpora:
+        if lang == 'gn':
+            if word_in_sentence(word, pair[0]):
+                examples.append(pair)
+        elif lang == 'es':
+            if word_in_sentence(word, pair[1]):
+                examples.append(pair)
+    examples.sort(key=lambda x: len(x[0]))            
+    return examples[0:4]
+
 data = []
-for word in inputjson:
-    x = {"word": unicodedata.normalize("NFC", word["word"]) , "meaning":getmeaning(word["definition"])}
-    data.append(x)
+lang='gn'
+with alive_bar(len(inputjson)) as bar:  # your expected total
+    for word in inputjson:
+        x = {"word": unicodedata.normalize("NFC", word["word"]) , "meaning":getmeaning(word["definition"]), "example":getexample(word["word"], lang)}
+        if word["word"] == 'yvyvovo':
+            lang = 'es'
+        data.append(x)
+        bar()
 
 with open(output_file, "w", encoding="utf8") as output:
     json.dump(data, fp=output, ensure_ascii=False)
