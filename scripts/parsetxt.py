@@ -11,13 +11,13 @@ corpora_file = 'corpora.json'
 word_definitions = []
 dictionary = {}
 
-# Read the input file and process each line
+# Reading each line
 with open(input_file, "r", encoding="utf-8") as file:
     for line in file:
         # Split each line into word and definition
         parts = line.strip().split(".", 1)
         
-        # Ensure the line has at least two parts (word and definition)
+        # Ensure the line has at least two parts for now (word and definition)
         if len(parts) == 2:
             word = parts[0]
             definition = parts[1]
@@ -29,7 +29,10 @@ with open(input_file, "r", encoding="utf-8") as file:
 # Write the list of word definitions to a JSON file
 with open(output_file, "w", encoding="utf-8") as json_file:
     json.dump(word_definitions, json_file, ensure_ascii=False, indent=4)
+#I know it's not truly completed, but as we all know: premature optimization is the root of all evil [bugs].
 
+with open("dictionary.json", "w", encoding="utf-8") as json_file:
+    json.dump(word_definitions, json_file, ensure_ascii=False, indent=4)
 
 print(f"Conversion completed. JSON file saved as {output_file}")
 

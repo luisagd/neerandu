@@ -17,7 +17,7 @@ var autoCompleteJS;
 export function Head() {
 	return (
 		<>
-			<title>:Ñe’ẽrandu: Diccionario Guarani</title>
+			<title>Ñe’ẽrandu: Diccionario Guarani</title>
 			<meta name="description" content="Ñe’ẽrandu: El mejor diccionario online - traductor a guaraní y español." />
 			<html lang="es" />
 			<link rel="preconnect" href="https://fonts.googleapis.com" />
