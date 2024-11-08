@@ -1,11 +1,13 @@
 .autoComplete_wrapper {
   display: inline-block;
   position: relative;
+  width: 100%;
+
 }
 
 .autoComplete_wrapper > input {
   height: 3.5rem;
-  width: 40rem;
+  max-width: 40rem;
   margin: 0;
   padding: 0 2rem 0 3.2rem;
   box-sizing: border-box;

@@ -65,7 +65,8 @@ export default function SearchBar() {
 			</div>
 			<div className="flex space-x-5 justify-center items-center">
 				<form
-					className="w-2/3 lg:w-1/2"
+					// className="w-2/3 lg:w-1/2"
+					className="grow"
 					onSubmit={(event) => {
 						event.preventDefault();
 						autoCompleteJS.close();
@@ -82,17 +83,18 @@ export default function SearchBar() {
 						}
 					}}
 				>
-					<label className="block mb-1 font-bold" htmlFor="query"></label>
-					<input
-						className="w-full text-black p-1 mb-3 border border-r-4 border-black xl:h-12"
-						type="search"
-						dir="ltr"
-						id="query"
-						spellCheck="false"
-						autoCorrect="off"
-						autoComplete="off"
-						autoCapitalize="off"
-					/>
+					<label className="block mb-1 font-bold">
+						<input
+							className="w-full text-black p-1 mb-3 border border-r-4 border-black xl:h-12 grow"
+							type="search"
+							dir="ltr"
+							id="query"
+							spellCheck="false"
+							autoCorrect="off"
+							autoComplete="off"
+							autoCapitalize="off"
+						/>
+					</label>
 				</form>
 			</div>
 		</div>
