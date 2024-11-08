@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/font.css";
 import "../styles/autoComplete.css";
-
+import SearchBar from "../components/SearchBar";
 import { useLocation } from "@gatsbyjs/reach-router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -212,7 +212,7 @@ function Diccionario() {
 				<header className=" mt-10 flex flex-col items-center text-center  text-5xl md:text-6xl lg:text-8xl lg:font-semibold lg:font-mono lg:mt-72">
 					<p className="">Ñe’ẽrandu</p>
 				</header>
-				<SearchResults />
+				<SearchBar />
 			</main>
 			<Footer />
 		</div>

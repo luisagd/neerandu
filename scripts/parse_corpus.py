@@ -52,7 +52,8 @@ for i in range(len(sanitized_gn)):
         break
     gn_index : str = sanitized_gn[i][0]
     es_index : str = sanitized_es[i][0]
-
+    if sanitized_gn[i][1]==sanitized_es[i][1]:
+        pass
     if gn_index==es_index:
         final_output.append((sanitized_gn[i][1], sanitized_es[i][1]))
     elif "-" in gn_index:
@@ -92,4 +93,4 @@ with open('corpora.json', "w", encoding="utf-8") as json_file:
 with open(output_file, "w", encoding="utf-8") as file:
     for line in final_output:
         file.write(f"{line}\n")
-    print(f"Conversion completed. File saved as {output_file}")
+    print(f"Conversion completed. File saved as {output_file} and corpora.json")

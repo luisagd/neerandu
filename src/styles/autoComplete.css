@@ -126,6 +126,6 @@
 @media only screen and (max-width: 600px) {
   .autoComplete_wrapper > input {
     height: 3rem;
-    width: 16rem;
+    width: 20rem;
   }
 }

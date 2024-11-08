@@ -85,7 +85,7 @@ export default function SearchBar() {
 				>
 					<label className="block mb-1 font-bold">
 						<input
-							className="w-full text-black p-1 mb-3 border border-r-4 border-black xl:h-12 grow"
+							className="w-full text-black p-1 border border-blue-300 rounded-3xl h-12 max-w-80 lg:max-w-[40rem]"
 							type="search"
 							dir="ltr"
 							id="query"
