@@ -14,7 +14,7 @@ export const Head = ({ location, params, data, pageContext }) => {
 	}
 	return (
 		<>
-			<title>{wordData.word} | Definición | Diccionario Guarani | Ñe’ẽrandu</title>
+			<title>{wordData.word} | Traducción | Diccionario Guarani | Ñe’ẽrandu</title>
 			<meta name="description" content={`${desc}`} />
 			<html lang="es" />
 			<link rel="preconnect" href="https://fonts.googleapis.com" />
