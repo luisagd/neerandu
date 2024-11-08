@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from "react";
 import "../styles/font.css";
 import "../styles/autoComplete.css";
-
-import { useLocation } from "@gatsbyjs/reach-router";
+import React from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import autoComplete from "@tarekraafat/autocomplete.js";
 import icon from "../images/luisagdlogo.svg";
 import SearchBar from "../components/SearchBar";
 
-const diacritics = ["’", "ñ", "ã", "ẽ", "ĩ", "õ", "ũ", "á", "é", "í", "ó", "ú", "ý"];
-
-const wordlist = require("../json/wordlist.json");
-
-var autoCompleteJS;
-
-export function Head() {
+export const Head = ({ location, params, data, pageContext }) => {
+	const { wordData } = pageContext;
+	let desc = "";
+	for (let i = 0; i < wordData.meaning.length; i++) {
+		desc = desc + (i + 1).toString() + "- " + wordData.meaning[i].translation + " ";
+	}
 	return (
 		<>
-			<title>Ñe’ẽrandu: Diccionario Guaraniss</title>
-			<meta name="description" content="Ñe’ẽrandu: El mejor diccionario online - traductor a guaraní y español." />
+			<title>{wordData.word} | Definición | Diccionario Guarani | Ñe’ẽrandu</title>
+			<meta name="description" content={`${desc}`} />
 			<html lang="es" />
 			<link rel="preconnect" href="https://fonts.googleapis.com" />
 			<link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -31,7 +27,7 @@ export function Head() {
 			<link rel="icon" type="image/x-icon" href={icon} />
 		</>
 	);
-}
+};
 function BoldedText({ text, shouldBeBold }) {
 	const textArray = text.split(RegExp(shouldBeBold, "ig"));
 	return (
@@ -48,20 +44,18 @@ function BoldedText({ text, shouldBeBold }) {
 
 const WordTemplate = ({ pageContext }) => {
 	const { wordData } = pageContext;
-	const location = useLocation();
-
-
 	return (
 		<>
 			<div>
 				<main className=" min-h-screen text-center">
+					``
 					{/* <Navbar /> */}
 					<header className=" mt-10 flex flex-col items-center text-center  text-5xl md:text-6xl lg:text-8xl lg:font-semibold lg:font-mono lg:mt-72">
 						<p className="">Ñe’ẽrandu</p>
 					</header>
-					<SearchBar/>
+					<SearchBar />
 					<div className="SearchResults flex flex-col lg:px-80">
-						{(
+						{
 							<div className="px-10 lg:px-80uy text-left">
 								<p className="text-3xl lg:text-7xl  font-montserrat">{wordData.word}</p>
 								<ol>
@@ -91,7 +85,7 @@ const WordTemplate = ({ pageContext }) => {
 									</div>
 								)}
 							</div>
-						)}
+						}
 					</div>
 				</main>
 				<Footer />

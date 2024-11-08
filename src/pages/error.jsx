@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import autoComplete from "@tarekraafat/autocomplete.js";
 import icon from "../images/luisagdlogo.svg";
 import Footer from "../components/Footer";
 import { useLocation } from "@gatsbyjs/reach-router";
@@ -25,9 +24,6 @@ export function Head() {
 }
 
 const wordlist = require("../json/wordlist.json");
-if (typeof window !== `undefined`) {
-	var url = new URL(window.location.href);
-}
 function findSimilarWords(n) {
 	let similarWords = [];
 	fuzzysort.go(n, wordlist, { limit: 5 }).forEach((item) => {
@@ -39,17 +35,13 @@ function findSimilarWords(n) {
 
 function Error() {
 	const location = useLocation();
-	if (typeof window !== `undefined`) {
-		var url = new URL(window.location.href);
-	}
 	const queryParams = new URLSearchParams(location.search);
 	const word = queryParams.get("q");
 	if (word === "" || word === "/" || word === null) {
 		console.log("ERR - URL word: " + word);
-		window.location.href = "/404";
+		if (typeof window !== "undefined") window.location.href = "/404";
 	}
 	let similarWords = findSimilarWords(word);
-
 	return (
 		<div>
 			<main className=" min-h-screen text-center">

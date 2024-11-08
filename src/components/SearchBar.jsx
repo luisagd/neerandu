@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import autoComplete from "@tarekraafat/autocomplete.js";
-
-const wordlist = require("../json/wordlist.json");
+import wordlist from "../json/wordlist.json";
+// const wordlist = require();
 
 var autoCompleteJS;
 export default function SearchBar() {
 	const diacritics = ["’", "ñ", "ã", "ẽ", "ĩ", "õ", "ũ", "á", "é", "í", "ó", "ú", "ý"];
-	if (typeof window !== `undefined`) {
-		var url = new URL(window.location.href);
-	}
+	var url;
 	useEffect(() => {
+		if (typeof window !== `undefined`) {
+			url = new URL(window.location.href);
+		}
 		// 👇️ only runs once
 		autoCompleteJS = new autoComplete({
 			placeHolder: "Buscar palabra...",
