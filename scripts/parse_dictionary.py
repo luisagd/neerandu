@@ -5,7 +5,7 @@ from alive_progress import alive_bar
 # Define the input and output file paths
 input_file = "input.txt"
 output_file = "diccionario.json"
-corpora_file = 'corpora.json'
+corpus_file = 'corpus.json'
 
 # Initialize an empty list to store word definitions
 word_definitions = []
@@ -98,7 +98,7 @@ def gettype(meaning:[str]):
     return result
 
 corpora= []
-with open(corpora_file, "r", encoding="utf8") as file:
+with open(corpus_file, "r", encoding="utf8") as file:
     corpora = json.load(file)
 
 def word_in_sentence(word, sentence):

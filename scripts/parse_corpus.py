@@ -85,12 +85,12 @@ for i in range(len(sanitized_gn)):
         print(sanitized_es[i][0]+ sanitized_es[i][1])
         raise 
 
-
+corups_file = 'corpus.json'
 # Write the list of word definitions to a JSON file
-with open('corpora.json', "w", encoding="utf-8") as json_file:
+with open(corups_file, "w", encoding="utf-8") as json_file:
     json.dump(final_output, json_file, ensure_ascii=False, indent=4)
 
 with open(output_file, "w", encoding="utf-8") as file:
     for line in final_output:
         file.write(f"{line}\n")
-    print(f"Conversion completed. File saved as {output_file} and corpora.json")
+    print(f"Conversion completed. File saved as {output_file} and {corups_file}")
