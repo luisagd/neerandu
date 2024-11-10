@@ -4,8 +4,11 @@ from alive_progress import alive_bar
 
 # Define the input and output file paths
 input_file = "input.txt"
-output_file = "diccionario.json"
+output_file_gn = "diccionario_gn.json"
+output_file_es = "diccionario_es.json"
 corpus_file = 'corpus.json'
+wordlist_es_file = 'wordlist_es.json'
+wordlist_gn_file = 'wordlist_gn.json'
 
 # Initialize an empty list to store word definitions
 word_definitions = []
@@ -25,19 +28,6 @@ with open(input_file, "r", encoding="utf-8") as file:
             word_definition = {"word": word, "definition": definition}
             # Append the word definition to the list
             word_definitions.append(word_definition)
-
-# Write the list of word definitions to a JSON file
-with open(output_file, "w", encoding="utf-8") as json_file:
-    json.dump(word_definitions, json_file, ensure_ascii=False, indent=4)
-#I know it's not truly completed, but as we all know: premature optimization is the root of all evil [bugs].
-
-with open("dictionary.json", "w", encoding="utf-8") as json_file:
-    json.dump(word_definitions, json_file, ensure_ascii=False, indent=4)
-
-print(f"Conversion completed. JSON file saved as {output_file}")
-
-with open(output_file, "r", encoding="utf8") as file:
-    inputjson = json.load(file)
 
 def getmeaning(definition:str):
     result = []
@@ -97,9 +87,9 @@ def gettype(meaning:[str]):
         result.append({"type":wordtype, "translation":wordtranslation})
     return result
 
-corpora= []
+corpus= []
 with open(corpus_file, "r", encoding="utf8") as file:
-    corpora = json.load(file)
+    corpus = json.load(file)
 
 def word_in_sentence(word, sentence):
     # Split the string into words
@@ -107,36 +97,50 @@ def word_in_sentence(word, sentence):
     # Check if the word is in the list of words
     return word.lower() in words    
 
-def getexample(word, lang):
+def getexample(word, lang, n :int):
     examples = []
-    for pair in corpora:
+    for pair in corpus:
         if lang == 'gn':
             if word_in_sentence(word, pair[0]):
                 examples.append(pair)
         elif lang == 'es':
             if word_in_sentence(word, pair[1]):
                 examples.append(pair)
+        else:
+            raise
     examples.sort(key=lambda x: len(x[0]))            
-    return examples[0:4]
+    return examples[0:n-1]
 
-data = []
+data_gn = []
+data_es = []
 lang='gn'
-with alive_bar(len(inputjson)) as bar:  # your expected total
-    for word in inputjson:
-        x = {"word": unicodedata.normalize("NFC", word["word"]) , "meaning":getmeaning(word["definition"]), "example":getexample(word["word"], lang)}
+with alive_bar(len(word_definitions)) as bar:  # your expected total
+    for word in word_definitions:
+        x = {"word": unicodedata.normalize("NFC", word["word"]) , "meaning":getmeaning(word["definition"]), "example":getexample(word["word"], lang, 5)}
+        if lang=='gn':
+            data_gn.append(x)
+        elif lang == 'es':
+            data_es.append(x)
         if word["word"] == 'yvyvovo':
             lang = 'es'
-        data.append(x)
         bar()
 
-with open(output_file, "w", encoding="utf8") as output:
-    json.dump(data, fp=output, ensure_ascii=False)
+with open(output_file_gn, "w", encoding="utf8") as output:
+    json.dump(data_gn, fp=output, ensure_ascii=False)
+with open(output_file_es, "w", encoding="utf8") as output:
+    json.dump(data_es, fp=output, ensure_ascii=False)
 
-print("Second part complete.")
+print(f"Dictionary saved at {output_file_gn} and {output_file_es}")
 
-wordlist = []
-for word in data:
-    wordlist.append(word["word"])
+wordlist_gn = []
+for word in data_gn:
+    wordlist_gn.append(word["word"])
+wordlist_es = []
+for word in data_es:
+    wordlist_es.append(word["word"])
 
-with open("wordlist.json", "w", encoding="utf8") as output:
-    json.dump(wordlist, fp=output, ensure_ascii=False)
+with open(wordlist_es_file, "w", encoding="utf8") as output:
+    json.dump(wordlist_es, fp=output, ensure_ascii=False)
+with open(wordlist_gn_file, "w", encoding="utf8") as output:
+    json.dump(wordlist_gn, fp=output, ensure_ascii=False)
+print(f"Wordlist dumped at {wordlist_es_file} and {wordlist_gn_file}")

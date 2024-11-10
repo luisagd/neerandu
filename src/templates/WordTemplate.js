@@ -50,7 +50,7 @@ const WordTemplate = ({ pageContext }) => {
 				<main className=" min-h-screen text-center">
 					{/* <Navbar /> */}
 					<header className=" mt-10 flex flex-col items-center text-center text-5xl md:text-7xl lg:text-8xl md:font-semibold lg:font-mono lg:mt-72">
-						<p className="">Ñe’ẽrandu</p>
+						<a href="/">Ñe’ẽrandu</a>
 					</header>
 					<SearchBar />
 					<div className="SearchResults flex flex-col lg:px-80">

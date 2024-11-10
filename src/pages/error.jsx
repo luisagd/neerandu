@@ -4,6 +4,8 @@ import Footer from "../components/Footer";
 import { useLocation } from "@gatsbyjs/reach-router";
 import fuzzysort from "fuzzysort";
 import SearchBar from "../components/SearchBar";
+import wordlist_gn from "../json/wordlist_gn.json";
+import wordlist_es from "../json/wordlist_es.json";
 
 export function Head() {
 	return (
@@ -35,6 +37,10 @@ function findSimilarWords(n) {
 
 function Error() {
 	const location = useLocation();
+	var url;
+	if (typeof window !== `undefined`) {
+		url = new URL(window.location.href);
+	}
 	const queryParams = new URLSearchParams(location.search);
 	const word = queryParams.get("q");
 	if (word === "" || word === "/" || word === null) {
@@ -47,22 +53,34 @@ function Error() {
 			<main className=" min-h-screen text-center">
 				{/* <Navbar /> */}
 				<header className=" mt-10 flex flex-col items-center text-center  text-5xl md:text-6xl lg:text-8xl lg:font-semibold lg:font-mono lg:mt-72">
-					<p className="">Ñe’ẽrandu</p>
+					<a href="/">Ñe’ẽrandu</a>
 				</header>
 				<SearchBar />
 				<div>
 					Palabra no encontrada. Quisás querrás haber escrito una de las siguientes palabras:
 					<ul className="list-none items-start">
-						{similarWords.map((item) => (
+						{similarWords.map((query) => (
 							<li className="mb-2 px-10 lg:px-80 text-left">
 								<p
 									className="text-xl lg:text-3xl  font-montserrat cursor-pointer"
 									onClick={() => {
-										// fetchData(item.obj.word);
-										window.location.href = "/diccionario/" + item;
+										if (wordlist_gn.includes(query)) {
+											//TODO: Fix the preference of gn over es
+											window.location.href = "/diccionario/" + query;
+										} else if (wordlist_es.includes(query)) {
+											url = new URL("/", window.location.origin);
+											url.searchParams.set("q", query);
+											window.history.replaceState(null, null, url); // or pushState
+											// fetchData(query);
+										} else {
+											url = new URL("error", window.location.origin);
+											url.searchParams.set("q", query);
+											if (window.location.pathname.includes("error")) window.history.pushState(null, null, url);
+											else window.location.href = url.href;
+										}
 									}}
 								>
-									{item}
+									{query}
 								</p>
 							</li>
 						))}

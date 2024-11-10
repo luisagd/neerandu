@@ -1,17 +1,47 @@
 import React, { useEffect } from "react";
 import autoComplete from "@tarekraafat/autocomplete.js";
-import wordlist from "../json/wordlist.json";
-// const wordlist = require();
+import wordlist_gn from "../json/wordlist_gn.json";
+import wordlist_es from "../json/wordlist_es.json";
 
 var autoCompleteJS;
-export default function SearchBar() {
+export default function SearchBar({ func }) {
 	const diacritics = ["’", "ñ", "ã", "ẽ", "ĩ", "õ", "ũ", "á", "é", "í", "ó", "ú", "ý"];
 	var url;
-	useEffect(() => {
-		if (typeof window !== `undefined`) {
-			url = new URL(window.location.href);
+	if (typeof window !== `undefined`) {
+		url = new URL(window.location.href);
+	}
+	const use_query = (query) => {
+		if (wordlist_gn.includes(query)) {
+			//TODO: Fix the preference of gn over es
+			window.location.href = "/diccionario/" + query;
+		} else if (wordlist_es.includes(query)) {
+			url = new URL("/diccionario/", window.location.origin);
+			url.searchParams.set("q", query);
+
+			// window.location.href = url.href;
+			console.log(window.location.pathname);
+			if (window.location.pathname == "/diccionario/") {
+				window.history.pushState(null, null, url); // or pushState
+				if (typeof func !== `undefined`) {
+					console.log(typeof func);
+					func();
+				}
+			} else {
+				window.location.href = url.href;
+			}
+
+			// fetchData(query);
+		} else {
+			url = new URL("error", window.location.origin);
+			url.searchParams.set("q", query);
+			if (window.location.pathname.includes("error")) window.history.pushState(null, null, url);
+			else window.location.href = url.href;
 		}
+		//TODO: Fix issue when going from /diccionario/... to /?q=... (it's not loading. probably due to pushState)
+	};
+	useEffect(() => {
 		// 👇️ only runs once
+		let wordlist = wordlist_gn.concat(wordlist_es);
 		autoCompleteJS = new autoComplete({
 			placeHolder: "Buscar palabra...",
 			data: {
@@ -43,8 +73,7 @@ export default function SearchBar() {
 			autoCompleteJS.input.value = selection;
 			const query = document.getElementById("query").value;
 			console.log("query: " + query);
-			window.location.href = "/diccionario/" + query;
-			console.log("feed" + feedback);
+			use_query(query);
 		});
 	}, []); // 👈️ empty dependencies array
 	return (
@@ -73,14 +102,7 @@ export default function SearchBar() {
 						const query = event.currentTarget.elements.query.value;
 						console.log("custom querys: " + query);
 						// window.history.replaceState(null, null, url); // or pushState
-						if (wordlist.includes(query)) {
-							window.location.href = "/diccionario/" + query;
-						} else {
-							url = new URL("error", window.location.origin);
-							url.searchParams.set("q", query);
-							if (window.location.pathname.includes("error")) window.history.pushState(null, null, url);
-							else window.location.href = url.href;
-						}
+						use_query(query);
 					}}
 				>
 					<label className="block mb-1 font-bold">
