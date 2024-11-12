@@ -68,9 +68,21 @@ function Error() {
 											//TODO: Fix the preference of gn over es
 											window.location.href = "/diccionario/" + query;
 										} else if (wordlist_es.includes(query)) {
-											url = new URL("/", window.location.origin);
+											url = new URL("/diccionario/", window.location.origin);
 											url.searchParams.set("q", query);
-											window.history.replaceState(null, null, url); // or pushState
+
+											// window.location.href = url.href;
+											console.log(window.location.pathname);
+											if (window.location.pathname == "/diccionario/") {
+												window.history.pushState(null, null, url); // or pushState
+												if (typeof func !== `undefined`) {
+													console.log(typeof func);
+													func();
+												}
+											} else {
+												window.location.href = url.href;
+											}
+
 											// fetchData(query);
 										} else {
 											url = new URL("error", window.location.origin);
@@ -78,6 +90,7 @@ function Error() {
 											if (window.location.pathname.includes("error")) window.history.pushState(null, null, url);
 											else window.location.href = url.href;
 										}
+										//TODO: Fix issue when going from /diccionario/... to /?q=... (it's not loading. probably due to pushState)
 									}}
 								>
 									{query}
